@@ -75,7 +75,6 @@ public class LocationActivity extends AppCompatActivity {
                 Intent data = new Intent();
                 descriptions = (EditText)findViewById(R.id.description);
                 String lastDescription = descriptions.getText().toString();
-                System.out.println(lastDescription);
                 data.putExtra("Lat", latitude);
                 data.putExtra("Long", longitude);
                 data.putExtra("activity", name);

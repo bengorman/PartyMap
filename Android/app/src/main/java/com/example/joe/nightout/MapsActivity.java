@@ -11,7 +11,9 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
@@ -19,7 +21,7 @@ import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
-
+    float color;
     private GoogleMap mMap;
 
     @Override
@@ -64,10 +66,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setMaxZoomPreference(25);
     }
 
-    public void addMarker(Double latitude, Double longitude){
+    public void addMarker(Double latitude, Double longitude, String activity, String description){
+        color = 240.0f;
+        switch (activity) {
+            case("Party"):
+                color = 0.0f;
+                break;
+            case ("Live Music"):
+                color = 210.0f;
+                break;
+            case("Sports"):
+                color = 120.0f;
+                break;
+            default:
+                color = 240.0f;
+        }
 
         LatLng newPlace = new LatLng(latitude, longitude);
-        mMap.addMarker(new MarkerOptions().position(newPlace).title("new Marker"));
+        mMap.addMarker(new MarkerOptions().position(newPlace).title(activity).icon(BitmapDescriptorFactory.defaultMarker(color)).snippet(description));
+
+
 
     }
 
@@ -75,6 +93,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         double latitude = data.getDoubleExtra("Lat", 0);
         double longitude = data.getDoubleExtra("Long", 0);
-        addMarker(latitude, longitude);
+        String type = data.getStringExtra("activity");
+        String description = data.getStringExtra("description");
+        addMarker(latitude, longitude, type, description);
     }
 }
