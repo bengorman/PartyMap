@@ -12,16 +12,43 @@
         h1 {
           font-family:Helvetica, Arial;
           text-align: center;
-          padding: 10px;
+          padding-top: 10px;
+          padding-left: 10px;
+          padding-right: 10px;
+          background-color: lightblue;
+        }
+        h3 {
+          font-family:Helvetica, Arial;
+          text-align: center;
+          padding: 5px;
+          background-color: lightblue;
+          padding-left: 5px;
         }
         body {
             font-family:Helvetica, Arial;
+            height: 90%;
+            background-color: lightblue;
         }
         button {
-          
+          font-size: 12pt;
+          margin-top: 5px;
+          margin-right: 10px;
+          margin-left: 10px;
+          font-family: Georgia;
+          text-align: center;
+          height: 60px;
+          width: 150px;
+          background-color: lightsalmon;
+        }
+        .wrapper {
+          background-color: lightblue;
+          padding-bottom: 3px;
+          display: flex;
+          justify-content: space-between;
         }
         #map_canvas {
-            height: 80%;
+            height: 88%;
+            background-color: lightblue;
         }
 </style>
 </head>
@@ -31,8 +58,11 @@
     </div>
     <h1>CollegeMaps®</h1>
     <div id="map_canvas" height="800px" width="100%"></div>
+    <div class="wrapper">
     <button id="newParty" type="button">New Event</button>
+    <h3>Created at SwampHacks 2018 by Benjamin Gorman, Nicholas Tateo, and Joseph Gravelle.</h3>
     <button id="showParties" type="button">Show Nearby Events</button>
+  </div>
     <div id="form">
       <table>
       <tr><td>Name:</td> <td><input type='text' id='name'/> </td> </tr>
@@ -44,7 +74,7 @@
                  <tr><td></td><td><input type='button' id="smallBtn" value='Save'/></td></tr>
       </table>
     </div>
-    <div id="message">Location Saved</div>
+    <div id="message">Location Saved!</div>
 </body>
 </html>
 
@@ -72,9 +102,9 @@ var marker;
 
 function initialize() {
   var formElement = document.getElementById("form");
-  formElement.style.visibility = "hidden";
+  formElement.style.display = "none";
   var messageElement = document.getElementById("message");
-  //messageElement.style.visibility = "hidden";
+  messageElement.style.display = "none";
 
   getLocation();
 directionsDisplay = new google.maps.DirectionsRenderer();
@@ -103,23 +133,28 @@ messagewindow = new google.maps.InfoWindow({
 
 var marker1, marker2, marker3;
 var position1, position2, position3;
+var flag = 0;
 document.getElementById("showParties").addEventListener("click", function(){
-    position1 = new google.maps.LatLng(.0146 * Math.random() + 29.6521, .0085 * Math.random() + -82.3393);
+  flag++;
+  if(flag < 4) {
+    position1 = new google.maps.LatLng(.0146 * Math.random() + 29.6521, .0416 * Math.random() + -82.3724);
     marker1 = new google.maps.Marker({
       position: position1,
       map: map
     });
-    position2 = new google.maps.LatLng(.0146 * Math.random() + 29.6521, .0085 * Math.random() + -82.3393);
+    position2 = new google.maps.LatLng(.0146 * Math.random() + 29.6521, .0416 * Math.random() + -82.3724);
     marker2 = new google.maps.Marker({
       position: position2,
       map: map
     });
-    position3 = new google.maps.LatLng(.0146 * Math.random() + 29.6521, .0085 * Math.random() + -82.3393);
+    position3 = new google.maps.LatLng(.0146 * Math.random() + 29.6521, .0416 * Math.random() + -82.3724);
     marker3 = new google.maps.Marker({
       position: position3,
       map: map
     });
+  }
   });
+
 
 document.getElementById("newParty").addEventListener("click", function(){
   marker = new google.maps.Marker({
@@ -129,14 +164,13 @@ document.getElementById("newParty").addEventListener("click", function(){
 
 
   google.maps.event.addListener(marker, 'click', function() {
-    formElement.style.visibility = "visible";
+    formElement.style.display = "";
     infowindow.open(map, marker);
   });
 
 
   document.getElementById("smallBtn").addEventListener("click", function() {
-    messageElement.style.display = "visible";
-    console.log(messageElement.style.display == "visible");
+    messageElement.style.display = "";
     messagewindow.open(map, marker);
     })
 });
