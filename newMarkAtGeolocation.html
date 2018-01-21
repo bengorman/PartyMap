@@ -1,0 +1,115 @@
+<html>
+<head>
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+<!--<script type="text/javascript" src="http://maps.google.com/maps/api/js?key=AIzaSyCAzdX3zslg53Bt_zqAJsEAs_Rsg62D5IM"></script>-->
+
+
+<title>Party Map</title>
+
+<style type="text/css">
+
+        body {
+            font-family:Helvetica, Arial;
+        }
+        #map_canvas {
+            height: 50%;
+        }
+</style>
+</head>
+<body>
+
+<body onload="initialize()">
+    <button id="clickme" type="button">New Party</button>
+    </div>
+    <div id="map_canvas"></div>
+    <div id="form">
+      <table>
+      <tr><td>Name:</td> <td><input type='text' id='name'/> </td> </tr>
+      <tr><td>Address:</td> <td><input type='text' id='address'/> </td> </tr>
+      <tr><td>Type:</td> <td><select id='type'> +
+                 <option value='bar' SELECTED>bar</option>
+                 <option value='restaurant'>restaurant</option>
+                 </select> </td></tr>
+                 <tr><td></td><td><input type='button' value='Save' onclick='saveData()'/></td></tr>
+      </table>
+    </div>
+    <div id="message">Location saved</div>
+</body>
+</html>
+
+
+<script type="text/javascript">
+var userLatLng;
+/*
+var showPosition = function (position) {
+userLatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+// Do whatever you want with userLatLng.
+}*/
+
+
+function getLocation() {
+  if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    }
+}
+
+function showPosition(position) {
+  userLatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+}
+
+
+var directionDisplay;
+var map;
+
+var infowindow;
+var messagewindow;
+var marker;
+
+function initialize() {
+  getLocation();
+directionsDisplay = new google.maps.DirectionsRenderer();
+var gainesville = new google.maps.LatLng(29.6516, -82.3248);
+var myOptions = {
+    zoom:12,
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+    center: gainesville
+  }
+
+
+
+map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+marker = new google.maps.Marker({
+  position: userLatLng,
+  map: map
+});
+
+
+
+
+infowindow = new google.maps.InfoWindow({
+  content: document.getElementById('form')
+});
+
+messagewindow = new google.maps.InfoWindow({
+  content: document.getElementById('message')
+});
+
+document.getElementById("clickme").addEventListener("click", function(){
+  marker = new google.maps.Marker({
+    position: userLatLng,
+    map: map
+  });
+
+
+  google.maps.event.addListener(marker, 'click', function() {
+    infowindow.open(map, marker);
+  });
+});
+
+
+}
+
+
+</script>
