@@ -9,45 +9,47 @@
 <title>Party Map</title>
 
 <style type="text/css">
-
+        h1 {
+          font-family:Helvetica, Arial;
+          text-align: center;
+          padding: 10px;
+        }
         body {
             font-family:Helvetica, Arial;
         }
+        button {
+          
+        }
         #map_canvas {
-            height: 50%;
+            height: 80%;
         }
 </style>
 </head>
 <body>
 
 <body onload="initialize()">
-    <button id="clickme" type="button">New Party</button>
     </div>
-    <div id="map_canvas"></div>
+    <h1>CollegeMaps®</h1>
+    <div id="map_canvas" height="800px" width="100%"></div>
+    <button id="newParty" type="button">New Event</button>
+    <button id="showParties" type="button">Show Nearby Events</button>
     <div id="form">
       <table>
       <tr><td>Name:</td> <td><input type='text' id='name'/> </td> </tr>
       <tr><td>Address:</td> <td><input type='text' id='address'/> </td> </tr>
       <tr><td>Type:</td> <td><select id='type'> +
-                 <option value='bar' SELECTED>bar</option>
-                 <option value='restaurant'>restaurant</option>
+                 <option value='party' SELECTED>Party</option>
+                 <option value='free-stuff'>Free Stuff</option>
                  </select> </td></tr>
-                 <tr><td></td><td><input type='button' value='Save' onclick='saveData()'/></td></tr>
+                 <tr><td></td><td><input type='button' id="smallBtn" value='Save'/></td></tr>
       </table>
     </div>
-    <div id="message">Location saved</div>
+    <div id="message">Location Saved</div>
 </body>
 </html>
 
 
 <script type="text/javascript">
-var userLatLng;
-/*
-var showPosition = function (position) {
-userLatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-// Do whatever you want with userLatLng.
-}*/
-
 
 function getLocation() {
   if (navigator.geolocation) {
@@ -55,6 +57,7 @@ function getLocation() {
     }
 }
 
+var userLatLng;
 function showPosition(position) {
   userLatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 }
@@ -68,15 +71,19 @@ var messagewindow;
 var marker;
 
 function initialize() {
+  var formElement = document.getElementById("form");
+  formElement.style.visibility = "hidden";
+  var messageElement = document.getElementById("message");
+  //messageElement.style.visibility = "hidden";
+
   getLocation();
 directionsDisplay = new google.maps.DirectionsRenderer();
-var gainesville = new google.maps.LatLng(29.6516, -82.3248);
+var uf = new google.maps.LatLng(29.6480, -82.3440);
 var myOptions = {
-    zoom:12,
+    zoom:15,
     mapTypeId: google.maps.MapTypeId.ROADMAP,
-    center: gainesville
+    center: uf
   }
-
 
 
 map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
@@ -84,8 +91,6 @@ marker = new google.maps.Marker({
   position: userLatLng,
   map: map
 });
-
-
 
 
 infowindow = new google.maps.InfoWindow({
@@ -96,7 +101,27 @@ messagewindow = new google.maps.InfoWindow({
   content: document.getElementById('message')
 });
 
-document.getElementById("clickme").addEventListener("click", function(){
+var marker1, marker2, marker3;
+var position1, position2, position3;
+document.getElementById("showParties").addEventListener("click", function(){
+    position1 = new google.maps.LatLng(.0146 * Math.random() + 29.6521, .0085 * Math.random() + -82.3393);
+    marker1 = new google.maps.Marker({
+      position: position1,
+      map: map
+    });
+    position2 = new google.maps.LatLng(.0146 * Math.random() + 29.6521, .0085 * Math.random() + -82.3393);
+    marker2 = new google.maps.Marker({
+      position: position2,
+      map: map
+    });
+    position3 = new google.maps.LatLng(.0146 * Math.random() + 29.6521, .0085 * Math.random() + -82.3393);
+    marker3 = new google.maps.Marker({
+      position: position3,
+      map: map
+    });
+  });
+
+document.getElementById("newParty").addEventListener("click", function(){
   marker = new google.maps.Marker({
     position: userLatLng,
     map: map
@@ -104,12 +129,17 @@ document.getElementById("clickme").addEventListener("click", function(){
 
 
   google.maps.event.addListener(marker, 'click', function() {
+    formElement.style.visibility = "visible";
     infowindow.open(map, marker);
   });
+
+
+  document.getElementById("smallBtn").addEventListener("click", function() {
+    messageElement.style.display = "visible";
+    console.log(messageElement.style.display == "visible");
+    messagewindow.open(map, marker);
+    })
 });
 
-
 }
-
-
 </script>
